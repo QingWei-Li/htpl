@@ -1,0 +1,24 @@
+{
+  "name": "htpl",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/cjs.js",
+  "unpkg": "dist/umd.js",
+  "repository": "qingwei-li/htpl",
+  "author": "qingwei.li <cinwell.li@gmail.com>",
+  "scripts": {
+    "test": "npm run build && node test/index.js",
+    "lint": "tslint -p tsconfig.json --fix",
+    "bundle": "rollup -c"
+  },
+  "files": ["src", "dist"],
+  "keywords": [],
+  "license": "MIT",
+  "devDependencies": {
+    "rollup": "^0.50.0",
+    "rollup-plugin-typescript": "^0.8.1",
+    "tslint": "^5.8.0",
+    "tslint-config-prettier": "^1.6.0",
+    "typescript": "^2.5.3"
+  }
+}
