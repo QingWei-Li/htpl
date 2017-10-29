@@ -35,7 +35,7 @@ export interface INode {
   iterator1?: string;
   iterator2?: string;
 
-  isUnaryTag?: boolean;
+  isUnaryTag?: boolean; // todo
 }
 
 function getAndRemoveAttr(el: INode, key: string) {
@@ -51,7 +51,7 @@ function processFor(node: INode, prefix) {
   if ((exp = getAndRemoveAttr(node, prefix + 'for'))) {
     const inMatch = exp.match(forAliasRE);
     if (!inMatch) {
-      throw Error(`Invalid ${prefix}for expression: ${exp}`);
+      throw Error(`Invalid h-for expression: ${exp}`);
     }
     node.for = inMatch[2].trim();
     const alias = inMatch[1].trim();
@@ -94,6 +94,32 @@ function addIfCondition(el: INode, condition: IASTIfCondition) {
   el.ifConditions.push(condition);
 }
 
+function processIfConditions(el, parent) {
+  const prev = findPrevElement(parent.children);
+  if (prev && prev.if) {
+    addIfCondition(prev, {
+      block: el,
+      exp: el.elseif
+    });
+  } else {
+    throw Error(
+      `h-${el.elseif ? 'else-if="' + el.elseif + '"' : 'else'} ` +
+        `used on element <${el.tag}> without corresponding h-if.`
+    );
+  }
+}
+
+function findPrevElement(children: INode[]): INode | void {
+  let i = children.length;
+  while (i--) {
+    if (children[i].type === 1) {
+      return children[i];
+    } else {
+      children.pop();
+    }
+  }
+}
+
 export function createAST(html: string = '', opts: IOptions = {}) {
   opts.minimize = opts.minimize !== false;
   const prefix = (opts.prefix = opts.prefix || 'h-');
@@ -119,8 +145,21 @@ export function createAST(html: string = '', opts: IOptions = {}) {
 
       if (!ast) {
         ast = node;
-      } else if (curParent.type === 1) {
-        curParent.children.push(node);
+      } else if (!stack.length) {
+        if (ast.if && (node.elseif || node.else)) {
+          addIfCondition(ast, {
+            block: node,
+            exp: node.elseif
+          });
+        }
+      }
+
+      if (curParent) {
+        if (node.elseif || node.else) {
+          processIfConditions(node, curParent);
+        } else {
+          curParent.children.push(node);
+        }
       }
 
       if (!isUnaryTag) {

@@ -1,4 +1,4 @@
-import { INode } from '../parser/index';
+import { IASTIfCondition, INode } from '../parser/index';
 import { listHelper } from './helper';
 
 export class NodeGen {
@@ -17,8 +17,6 @@ export class NodeGen {
       helpers.push(listHelper);
     }
 
-    console.log(code);
-
     return `with(this){${helpers.join()}return ${code}}`;
   }
 
@@ -27,7 +25,7 @@ export class NodeGen {
       this.hasFor = true;
       return this.genFor(node);
     } else if (node.if) {
-      return this.genIf(node);
+      return this.genIf(node.ifConditions.slice());
     } else {
       return this.genTag(node);
     }
@@ -41,8 +39,19 @@ export class NodeGen {
     )}}).join(" ")`;
   }
 
-  private genIf(node: INode) {
-    return '';
+  private genIf(conditions: IASTIfCondition[]) {
+    if (!conditions.length) {
+      return '""';
+    }
+    const condition = conditions.shift();
+
+    if (condition.exp) {
+      return `((${condition.exp})?${this.genTag(condition.block)}:${this.genIf(
+        conditions
+      )})`;
+    } else {
+      return this.genTag(condition.block);
+    }
   }
 
   private genTag(node: INode) {

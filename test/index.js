@@ -1,13 +1,13 @@
-var htpl = require('../dist/htpl.common');
+const htpl = require('../dist/htpl.common');
 
-const a = htpl(
-  `<div>
-    <div h-for="n in list">
-      <span>'111'{{ n }}</span>
-    </div>
-    <input>
-    <span>333</span>
-  </div>`
-);
+const html = htpl(`
+<div>
+  <h1>Hello, {{ name }}</h1>
+  <span h-for="n in list">{{ n }}</span>
+</div>
+`).render({
+  name: 'htpl',
+  list: ['扒 Vue 源码', '糊出来的', '模板引擎']
+});
 
-console.log(a.render({ list: 6 }));
+console.log(html);

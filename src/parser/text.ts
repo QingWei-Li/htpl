@@ -1,18 +1,14 @@
-/* @flow */
-
-const defaultTagRE = /\{\{((?:.|\n)+?)\}\}/g;
+const TAG_RE = /\{\{((?:.|\n)+?)\}\}/g;
 
 export function parseText(text: string): string | void {
-  const tagRE = defaultTagRE;
-
-  if (!tagRE.test(text)) {
+  if (!TAG_RE.test(text)) {
     return JSON.stringify(text);
   }
 
   const tokens = [];
-  let lastIndex = (tagRE.lastIndex = 0);
+  let lastIndex = (TAG_RE.lastIndex = 0);
   let match, index;
-  while ((match = tagRE.exec(text))) {
+  while ((match = TAG_RE.exec(text))) {
     index = match.index;
     // push text token
     if (index > lastIndex) {
