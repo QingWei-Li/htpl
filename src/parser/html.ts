@@ -12,13 +12,13 @@ const startTag = /^<([^\s=\/!>]+)((?:\s+[^\s=\/>]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[
   rawTagsDefault = /^(style|script)$/i,
   unaryTag = /^(area|base|br|col|embed|frame|hr|img|input|isindex|keygen|link|meta|param|source|track|wbr)$/;
 
-const no = () => {};
+function no() {}
 
-const matchEndDefault = tagName => {
+function matchEndDefault(tagName) {
   return new RegExp('</' + tagName, 'i');
-};
+}
 
-const onStartTag = (html, match, handler) => {
+function onStartTag(html, match, handler) {
   const attrs = {},
     tag = match[0],
     tagName = match[1],
@@ -32,9 +32,9 @@ const onStartTag = (html, match, handler) => {
   handler(tag, tagName, attrs, selfClosing, html);
 
   return html;
-};
+}
 
-const onTag = (html, match, handler) => {
+function onTag(html, match, handler) {
   const tag = match[0],
     tagName = match[1];
   html = html.slice(tag.length);
@@ -42,9 +42,9 @@ const onTag = (html, match, handler) => {
   handler(tag, tagName, html);
 
   return html;
-};
+}
 
-const onText = (html, index, isRawText, handler) => {
+function onText(html, index, isRawText, handler) {
   let text;
   if (~index) {
     text = html.slice(0, index);
@@ -59,9 +59,9 @@ const onText = (html, index, isRawText, handler) => {
   }
 
   return html;
-};
+}
 
-const rawEnd = (html, ending, offset = 0) => {
+function rawEnd(html, ending, offset = 0) {
   const index = html.search(ending),
     commentMatch = html.match(commentInside);
   let commentEnd;
@@ -73,7 +73,7 @@ const rawEnd = (html, ending, offset = 0) => {
     return rawEnd(html, ending, offset);
   }
   return index + offset;
-};
+}
 
 export function parseHTML(html: string, options: any = {}) {
   const startHandler = options.start || no,

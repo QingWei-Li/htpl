@@ -2,23 +2,28 @@
   "name": "htpl",
   "version": "0.0.0",
   "description": "",
-  "main": "dist/cjs.js",
-  "unpkg": "dist/umd.js",
+  "main": "dist/htpl.common.js",
+  "unpkg": "dist/htpl.js",
   "repository": "qingwei-li/htpl",
   "author": "qingwei.li <cinwell.li@gmail.com>",
   "scripts": {
     "test": "npm run build && node test/index.js",
-    "lint": "tslint -p tsconfig.json --fix",
-    "bundle": "rollup -c"
+    "lint": "tslint src/**/*.ts --fix",
+    "build": "rollup -c && uglifyjs dist/htpl.js -o dist/htpl.min.js"
   },
-  "files": ["src", "dist"],
+  "files": [
+    "src",
+    "dist"
+  ],
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
+    "jest": "^21.2.1",
     "rollup": "^0.50.0",
     "rollup-plugin-typescript": "^0.8.1",
     "tslint": "^5.8.0",
     "tslint-config-prettier": "^1.6.0",
-    "typescript": "^2.5.3"
+    "typescript": "^2.5.3",
+    "uglify-js": "^3.1.5"
   }
 }

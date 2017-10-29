@@ -12,12 +12,12 @@ export default {
 
   output: [
     {
-      file: 'dist/umd.js',
+      file: 'dist/htpl.js',
       format: 'umd',
       name: 'Htpl'
     },
     {
-      file: 'dist/cjs.js',
+      file: 'dist/htpl.common.js',
       format: 'cjs'
     }
   ]
