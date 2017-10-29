@@ -1,4 +1,5 @@
 import { parseHTML } from './html';
+import { parseText } from './text';
 
 const forAliasRE = /(.*?)\s+(?:in|of)\s+(.*)/;
 const forIteratorRE = /\((\{[^}]*\}|[^,]*),([^,]*)(?:,([^,]*))?\)/;
@@ -138,7 +139,7 @@ export function createAST(html: string = '', opts: IOptions = {}) {
     text(text) {
       if (curParent.type === 1) {
         curParent.children.push({
-          text,
+          text: parseText(text),
           type: 2
         } as INode);
       }

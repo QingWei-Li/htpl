@@ -17,6 +17,8 @@ export class NodeGen {
       helpers.push(listHelper);
     }
 
+    console.log(code);
+
     return `with(this){${helpers.join()}return ${code}}`;
   }
 
@@ -36,7 +38,7 @@ export class NodeGen {
       ? ',' + node.iterator1
       : ''}${node.iterator1 ? ',' + node.iterator2 : ''}){return ${this.genTag(
       node
-    )}}).join(' ')`;
+    )}}).join(" ")`;
   }
 
   private genIf(node: INode) {
@@ -45,7 +47,7 @@ export class NodeGen {
 
   private genTag(node: INode) {
     if (node.type === 1) {
-      let child = "''";
+      let child = '""';
       if (Array.isArray(node.children)) {
         child = node.children.map(c => this.createNode(c)).join('+');
       }
@@ -59,10 +61,9 @@ export class NodeGen {
         attr = attr && ' ' + attr;
       }
 
-      return `'<${tag}${attr}>'+${child}` + (isUnaryTag ? '' : `+'</${tag}>'`);
+      return `"<${tag}${attr}>"+${child}` + (isUnaryTag ? '' : `+"</${tag}>"`);
     } else if (node.type === 2) {
-      // TODO
-      return `'${node.text.replace(/\n/g, '\\n').replace(/\'/g, '"')}'`;
+      return node.text;
     } else if (node.type === 3) {
       return `<!-- ${node.text} -->`;
     }
