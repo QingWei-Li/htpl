@@ -71,10 +71,8 @@ export class NodeGen {
       }
 
       return `"<${tag}${attr}>"+${child}` + (isUnaryTag ? '' : `+"</${tag}>"`);
-    } else if (node.type === 2) {
+    } else {
       return node.text;
-    } else if (node.type === 3) {
-      return `<!-- ${node.text} -->`;
     }
   }
 }

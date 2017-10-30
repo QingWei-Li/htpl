@@ -7,6 +7,7 @@ export default function htpl(html: string, opts: IOptions) {
 
   return {
     ast,
+    code: code.code,
     render: code.render
   };
 }

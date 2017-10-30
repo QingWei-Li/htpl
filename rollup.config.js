@@ -19,6 +19,10 @@ export default {
     {
       file: 'dist/htpl.common.js',
       format: 'cjs'
+    },
+    {
+      file: 'dist/htpl.es.js',
+      format: 'es'
     }
   ]
 };

@@ -120,6 +120,12 @@ function findPrevElement(children: INode[]): INode | void {
   }
 }
 
+function processPre(node, prefix) {
+  if (getAndRemoveAttr(node, prefix + 'pre') != null) {
+    node.pre = true;
+  }
+}
+
 export function createAST(html: string = '', opts: IOptions = {}) {
   opts.minimize = opts.minimize !== false;
   const prefix = (opts.prefix = opts.prefix || 'h-');
@@ -130,6 +136,14 @@ export function createAST(html: string = '', opts: IOptions = {}) {
     children: [],
     type: 1
   };
+  let inVPre = false;
+
+  function endPre(node) {
+    // check pre state
+    if (node.pre) {
+      inVPre = false;
+    }
+  }
 
   parseHTML(html.trim(), {
     start(raw, tag, attrs, isUnaryTag) {
@@ -140,8 +154,17 @@ export function createAST(html: string = '', opts: IOptions = {}) {
         type: 1
       };
 
-      processFor(node, prefix);
-      processIf(node, prefix);
+      if (inVPre) {
+        return;
+      }
+
+      processPre(node, prefix);
+      if (node.pre) {
+        inVPre = true;
+      } else {
+        processFor(node, prefix);
+        processIf(node, prefix);
+      }
 
       if (!ast) {
         ast = node;
@@ -166,13 +189,16 @@ export function createAST(html: string = '', opts: IOptions = {}) {
         node.children = [];
         curParent = node;
         stack.push(node);
+      } else {
+        endPre(node);
       }
     },
 
     end(raw, tag) {
-      // pop stack
+      const node = stack[stack.length - 1];
       stack.length -= 1;
       curParent = stack[stack.length - 1];
+      endPre(node);
     },
 
     text(text) {
@@ -187,7 +213,7 @@ export function createAST(html: string = '', opts: IOptions = {}) {
     comment(text) {
       if (curParent.type === 1) {
         curParent.children.push({
-          text,
+          text: parseText(text),
           type: 3
         } as INode);
       }

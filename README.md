@@ -1,14 +1,16 @@
-# htpl
+# htpl [Not ready]
 
-> xxx
+> A JavaScript templating engine uses Vue syntax
 
-# Install
+[![npm](https://img.shields.io/npm/v/htpl.svg)](https://www.npmjs.com/package/htpl)
+
+## Install
 
 ```sh
 npm i htpl
 ```
 
-# Usage
+## Usage
 
 ```js
 import * as htpl from 'htpl'
@@ -24,7 +26,6 @@ htpl(`
 })
 ```
 
-# License
+## License
 
 MIT
-

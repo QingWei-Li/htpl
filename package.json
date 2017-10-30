@@ -1,21 +1,20 @@
 {
   "name": "htpl",
   "version": "0.0.0",
-  "description": "",
+  "description": "A template engine uses Vue syntax",
   "main": "dist/htpl.common.js",
   "unpkg": "dist/htpl.js",
+  "umd:main": "dist/htpl.js",
+  "module": "dist/htpl.es.js",
   "repository": "qingwei-li/htpl",
   "author": "qingwei.li <cinwell.li@gmail.com>",
   "scripts": {
-    "test": "npm run build && node test/index.js",
+    "test": "npm run build && node test",
     "lint": "tslint src/**/*.ts --fix",
     "build": "rollup -c && uglifyjs dist/htpl.js -o dist/htpl.min.js"
   },
-  "files": [
-    "src",
-    "dist"
-  ],
-  "keywords": [],
+  "files": ["src", "dist"],
+  "keywords": ["template", "vue-syntax"],
   "license": "MIT",
   "devDependencies": {
     "jest": "^21.2.1",
